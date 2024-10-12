@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    stages {
+        stage('环境检查'){
+            steps {
+                sh 'printenv'
+                echo "正在检测基本信息"
+                sh 'java -version'
+                sh 'git --version'
+                sh 'docker version'
+                sh 'pwd && ls -alh'
+            }
+        }
+        stage('Maven编译打包') {
+            steps {
+                sh 'echo Maven编译打包'
+            }
+        }
+
+        stage('制作Docker镜像') {
+            steps {
+                sh 'echo 制作Docker镜像'
+            }
+        }
+        stage('推送镜像到仓库') {
+            steps {
+                sh 'echo 推送镜像到仓库'
+            }
+        }
+        stage('部署应用') {
+            steps {
+                sh 'echo 部署应用'
+            }
+        }
+    }
+}
