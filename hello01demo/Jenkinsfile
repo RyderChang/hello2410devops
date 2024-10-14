@@ -11,6 +11,11 @@ pipeline {
                 sh 'pwd && ls -alh'
             }
         }
+        stage('SonarCube代码检查') {
+            steps {
+                sh 'echo SonarQube 代码检查'
+            }
+        }
         stage('Maven编译打包') {
             steps {
                 sh 'echo Maven编译打包'
