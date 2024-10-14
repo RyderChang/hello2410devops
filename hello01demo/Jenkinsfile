@@ -12,8 +12,14 @@ pipeline {
             }
         }
         stage('SonarCube代码检查') {
-            steps {
-                sh 'echo SonarQube 代码检查'
+             steps {
+                 script {
+                     scannerHome = tool 'sonar-scanner'
+                     }
+                     withSonarQubeEnv('sonarqube') {
+                         sh 'pwd && ls -alh'
+                         sh "cd hello01demo && pwd && ls -alh && ${scannerHome}/bin/sonar-scanner"
+                     }
             }
         }
         stage('Maven编译打包') {
