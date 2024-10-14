@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        WS = "${WORKSPACE}"
+        IMAGE_VERSION = "1.0"
+    }
     stages {
         stage('环境检查'){
             steps {
@@ -23,16 +27,32 @@ pipeline {
             }
         }
         stage('Maven编译打包') {
+            agent {
+                docker {
+                    image 'maven:3.9.6-sapmachine-17'
+                    args '-v /home/root/mavenrepo/:/root/.m2/repository'
+                    }
+            }
             steps {
-                sh 'echo Maven编译打包'
+                sh 'pwd && ls -alh'
+                sh 'mvn -v'
+                sh "echo 默认的工作目录：${WS}"
+                //每一行指令都是基于当前环境信息。和上下指令无关
+                sh 'cd ${WS}/hello01demo && mvn clean package -s "/var/jenkins_home/appconfig/maven/mvn-settings.xml"  -Dmaven.test.skip=true'
+                sh 'cd ${WS}/hello01demo/target && ls -alh'
             }
         }
 
         stage('制作Docker镜像') {
             steps {
                 sh 'echo 制作Docker镜像'
+                sh 'docker version'
+                sh 'pwd && ls -alh'
+                sh 'cd ${WS}/hello01demo && ls -alh'
+                sh 'cd ${WS}/hello01demo && docker build -t java-devops-demo:${IMAGE_VERSION} .'
             }
         }
+
         stage('推送镜像到仓库') {
             steps {
                 sh 'echo 推送镜像到仓库'
@@ -40,7 +60,9 @@ pipeline {
         }
         stage('部署应用') {
             steps {
-                sh 'echo 部署应用'
+                sh 'echo 部署。。。'
+                sh 'docker run -dp 8000:8080 java-devops-demo:${IMAGE_VERSION}'
+
             }
         }
     }
