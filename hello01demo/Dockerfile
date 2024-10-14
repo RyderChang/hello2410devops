@@ -1,5 +1,5 @@
 FROM openjdk:17-jdk-slim
-LABEL maintainer=448417@qq.com
+LABEL maintainer=1262395164@qq.com
 
 COPY target/*.jar   /app.jar
 
