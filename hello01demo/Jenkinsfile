@@ -19,11 +19,11 @@ pipeline {
              steps {
                  script {
                      scannerHome = tool 'sonar-scanner'
-                     }
-                     withSonarQubeEnv('sonarqube') {
-                         sh 'pwd && ls -alh'
-                         sh "cd hello01demo && pwd && ls -alh && ${scannerHome}/bin/sonar-scanner"
-                     }
+                 }
+                 withSonarQubeEnv('sonarqube') {
+                     sh 'pwd && ls -alh'
+                     sh "cd hello01demo && pwd && ls -alh && ${scannerHome}/bin/sonar-scanner"
+                 }
             }
         }
         stage('Maven编译打包') {
